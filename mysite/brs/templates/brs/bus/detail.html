@@ -1,0 +1,10 @@
+{% extends "brs/base.html" %}
+{% block title %}{{ bus.title }}{% endblock %}
+{% block content %}
+<h1>{{ bus.title }} - {{ bus.number }}</h1>
+<h5>Status: {{ bus.status }}</h5>
+<p>
+    Leaving for {{ bus.destination }} by {{ bus.departure_time }}
+</p>
+<p>Seats available: {{ bus.available_seats }}</p>
+{% endblock %}

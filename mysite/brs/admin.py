@@ -1,3 +1,4 @@
+from xml.dom.minidom import ReadOnlySequentialNamedNodeMap
 from django.contrib import admin
 from .models import Bus, Ticket
 
@@ -11,9 +12,9 @@ class BusAdmin(admin.ModelAdmin):
     ordering = ('status', 'available_seats')
 
 @admin.register(Ticket)
-class BusAdmin(admin.ModelAdmin):
+class TicketAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug', 'booked_seats', 'bus')
     list_filter = ('bus',)
     search_fields = ('name', 'number')
-    prepopulated_fields = {'slug': ('name', 'number')}
+    prepopulated_fields = {'slug': ('name',)}
     ordering = ('booked_seats',)

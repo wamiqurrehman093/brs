@@ -1,0 +1,16 @@
+{% extends "brs/base.html" %}
+{% block title %}Buses{% endblock %}
+{% block content %}
+<h1>Buses</h1>
+{% for bus in buses %}
+<h2>
+    <a href="{{ bus.get_absolute_url }}">
+        {{ bus.title }} - {{ bus.number }}
+    </a>
+</h2>
+<p class="date">
+    Leaving for {{ bus.destination }} by {{ bus.departure_time }}
+</p>
+{% endfor %}
+{% include "pagination.html" with page=buses %}
+{% endblock %}

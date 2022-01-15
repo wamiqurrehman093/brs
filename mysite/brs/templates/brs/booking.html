@@ -1,0 +1,11 @@
+{% extends "brs/base.html" %}
+{% block title %}Book Ticket{% endblock %}
+{% block content %}
+<h1>Get your ticket!</h1>
+<form method="post">
+    {{ ticket_form.as_p }}
+    {% csrf_token %}
+    <p><input type="submit" value="Book"></p>
+</form>
+<p>{{ error }}</p>
+{% endblock %}
