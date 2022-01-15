@@ -10,6 +10,8 @@ urlpatterns = [
     path('cancellation/', views.cancellation, name='cancellation'),
     path('status/', views.status, name='status'),
     path('tickets/<slug:slug>', views.ticket_detail, name='ticket_detail'),
+    path('tickets/delete/<int:number>', views.delete_ticket, name='delete_ticket'),
+    path('tickets/search/', views.search_ticket, name='search_ticket'),
     path('buses/', views.bus_list, name='bus_list'),
     path('buses/<slug:slug>/',
          views.bus_detail,

@@ -1,0 +1,8 @@
+{% extends "brs/base.html" %}
+{% block title %}Bus Registration System{% endblock %}
+{% block content %}
+<h1>Bus Registration System</h1>
+<p><a href="{% url 'brs:bus_list' %}"><input type="submit" value="Buses List"></a></p>
+<p><a href="{% url 'brs:booking' %}"><input type="submit" value="Buy Ticket"></a></p>
+<p><a href="{% url 'brs:search_ticket' %}"><input type="submit" value="Check Ticket"></a></p>
+{% endblock %}

@@ -3,10 +3,12 @@
 {% block content %}
 <h1>{{ ticket.name }} - {{ ticket.number }}</h1>
 <h3>{{ ticket.bus.title }} - {{ ticket.bus.number }}</h3>
+<h4>Ticket Number: {{ ticket.number }}</h4>
 <h5>Status: {{ ticket.bus.status }}</h5>
 <p>
     Leaving for {{ ticket.bus.destination }} by {{ ticket.bus.departure_time }}
 </p>
 <p>Booked {{ ticket.booked_seats }} seat{{ ticket.booked_seats|pluralize }}.</p>
-<a href="{% url 'brs:booking' %}">Need another ticket?</a>
+<p><a href="{% url 'brs:booking' %}">Need another ticket?</a></p>
+<p><a href="{% url 'brs:delete_ticket' number=ticket.number %}"><input type="submit" value="Delete"></a></p>
 {% endblock %}

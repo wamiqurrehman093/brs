@@ -5,9 +5,11 @@ from time import timezone
 from xmlrpc.client import DateTime
 from django.shortcuts import render, get_object_or_404
 from .models import Bus, Ticket
-from .forms import TicketForm
+from .forms import TicketForm, SearchForm
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from datetime import datetime
+from django.shortcuts import redirect
+from django.core.exceptions import ObjectDoesNotExist
 
 # Create your views here.
 def main(request):
@@ -28,16 +30,17 @@ def booking(request):
                 error = 'This many seats are not available.'
                 return render(request, 'brs/booking.html', {'ticket_form': ticket_form, 'error': error})
             bus.available_seats -= new_ticket.booked_seats
+            if bus.available_seats == 0:
+                bus.status = 'not_available'
             bus.save()
             name = ticket_form.cleaned_data['name'].replace(' ', '-').lower()
             ticket_date = str(datetime.now().strftime("%Y-%m-%d-%H-%M-%S"))
             new_ticket.slug = name + "-" + ticket_date
             new_ticket.save()
             return HttpResponseRedirect(new_ticket.get_absolute_url())
-            #return render(request, 'brs/booked.html', {'ticket': new_ticket, 'error': error})
     else:
         ticket_form = TicketForm()
-    return render(request, 'brs/booking.html', {'ticket_form': ticket_form})
+    return render(request, 'brs/booking.html', {'ticket_form': ticket_form, 'error': error})
 
 def cancellation(request):
     return render(request, 'brs/cancellation.html', {})
@@ -64,3 +67,29 @@ def bus_detail(request, slug):
 def ticket_detail(request, slug):
     ticket = get_object_or_404(Ticket, slug=slug)
     return render(request, 'brs/ticket/detail.html', {'ticket': ticket})
+
+def delete_ticket(request, number):
+    ticket = get_object_or_404(Ticket, number=number)
+    bus = ticket.bus
+    bus.available_seats += ticket.booked_seats
+    bus.save()
+    ticket.delete()
+    return redirect('/brs/booking/')
+
+def search_ticket(request):
+    form = SearchForm()
+    query = None
+    ticket = []
+    if 'query' in request.GET:
+        form = SearchForm(request.GET)
+        if form.is_valid():
+            query = form.cleaned_data['query']
+            try:
+                ticket = Ticket.objects.get(number=query)
+            except ObjectDoesNotExist:
+                ticket = []
+    return render(request,
+                  'brs/ticket/search.html',
+                  {'form': form,
+                   'query': query,
+                   'ticket': ticket})
